@@ -1,17 +1,10 @@
 from fastapi import FastAPI
 
+# import API routers
+from routes import router
+from stocks import stocks_router
+
 app = FastAPI()
 
-@app.get("/")
-async def root():
-    return {
-        "name": "MarketLens",
-        "status": "running"
-    }
-
-@app.get("/about")
-async def about():
-    return {
-        "project": "MarketLens",
-        "description": "Market data analytics platform"
-    }
+app.include_router(router)
+app.include_router(stocks_router)
