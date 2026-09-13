@@ -3,11 +3,22 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
+from collections.abc import Generator
+from sqlalchemy.orm import Session
+
 #"postgresql+psycopg://marketlens:marketlens_dev@localhost:5432/marketlens"
-DATABASE_URL = os.environ("DATABASE_URL")
+DATABASE_URL = os.environ["DATABASE_URL"] 
 
 engine = create_engine(DATABASE_URL)
 
 SessionLocal = sessionmaker(bind=engine)
+
+def get_db() -> Generator[Session, None, None]:
+    db  = SessionLocal()
+
+    try:
+        yield db
+    finally:
+        db.close()
 
 
