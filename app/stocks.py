@@ -1,13 +1,14 @@
 from fastapi import APIRouter, Depends, HTTPException, status, FastAPI
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import IntegrityError
 
-from database.connection import get_db
-from database.repositories import get_all_stocks
-from database.repositories import get_stock_by_symbol
-from database.repositories import create_stock
+from app.database.connection import get_db
+from app.database.repositories import get_all_stocks
+from app.database.repositories import get_stock_by_symbol
+from app.database.repositories import create_stock
 
 
-from schemas.stocks import StockResponse, StockCreate
+from app.schemas.stocks import StockResponse, StockCreate
 
 stocks_router = APIRouter()
 
@@ -32,4 +33,10 @@ async def add_stock(
     stock_data: StockCreate,
     db: Session = Depends(get_db),
 ):
-    return create_stock(db, stock_data)
+    try:
+        return create_stock(db,stock_data)
+    except IntegrityError:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="A stock with that symbol already exists"
+        )

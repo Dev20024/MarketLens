@@ -1,9 +1,10 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import IntegrityError
 
-from database.models import Stock
+from app.database.models import Stock
 
-from schemas.stocks import StockCreate
+from app.schemas.stocks import StockCreate
 
 
 def get_all_stocks(db: Session):
@@ -25,9 +26,11 @@ def create_stock(db: Session, stock_data: StockCreate):
         exchange=stock_data.exchange,
         sector=stock_data.sector,
     )
-    
-    db.add(stock)
-    db.commit()
-    db.refresh(stock)
-
-    return stock
+    try:
+        db.add(stock)
+        db.commit()
+        db.refresh(stock)
+        return stock
+    except IntegrityError:
+        db.rollback()
+        raise

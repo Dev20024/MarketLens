@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 
 # import API routers
-from routes import router
-from stocks import stocks_router
+from app.routes import router
+from app.stocks import stocks_router
 
 app = FastAPI()
 
