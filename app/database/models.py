@@ -20,7 +20,7 @@ class Stock(Base):
     company_name: Mapped[str]
     exchange: Mapped[str]
     sector: Mapped[str] = mapped_column(nullable=True)
-    created_at: Mapped[datetime] = mapped_column(DateTime)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)
 
     daily_prices: Mapped[list["DailyPrice"]] = relationship(back_populates="stock")
 
