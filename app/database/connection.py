@@ -1,5 +1,6 @@
 import os
 
+from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -7,8 +8,10 @@ from collections.abc import Generator
 from sqlalchemy.orm import Session
 
 
+load_dotenv()
+
 DATABASE_URL = "postgresql+psycopg://marketlens:marketlens_dev@localhost:5432/marketlens"
-#os.environ["DATABASE_URL"] 
+os.environ["DATABASE_URL"] 
 
 engine = create_engine(DATABASE_URL)
 

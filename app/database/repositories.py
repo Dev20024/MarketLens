@@ -17,7 +17,7 @@ def get_stock_by_symbol(db: Session, symbol: str):
     statement = select(Stock).where(Stock.symbol == symbol)
     result = db.execute(statement)
 
-    return result.scalar_one_ornone()
+    return result.scalar_one_or_none()
 
 def create_stock(db: Session, stock_data: StockCreate):
     stock = Stock(
